@@ -542,6 +542,8 @@ The following questions cover filesystem concepts beyond the implementation scop
 ### Branching and Checkout
 
 **Q5.1:** A branch in Git is just a file in `.git/refs/heads/` containing a commit hash. Creating a branch is creating a file. Given this, how would you implement `pes checkout <branch>` — what files need to change in `.pes/`, and what must happen to the working directory? What makes this operation complex?
+
+ANSWER
 pes checkout <branch>
 To implement pes checkout <branch>, the following steps are required:
 • Update the .pes/HEAD file to point to the selected branch:
@@ -558,6 +560,8 @@ file conflicts, and ensure no data loss occurs while modifying the
 working directory.
 
 **Q5.2:** When switching branches, the working directory must be updated to match the target branch's tree. If the user has uncommitted changes to a tracked file, and that file differs between branches, checkout must refuse. Describe how you would detect this "dirty working directory" conflict using only the index and the object store.
+
+ANSWER
 Detecting Dirty Working Directory
 To detect uncommitted changes:
 • For each file in the index:
@@ -573,6 +577,8 @@ target branch, the checkout operation must be refused to prevent
 overwriting changes.
 
 **Q5.3:** "Detached HEAD" means HEAD contains a commit hash directly instead of a branch reference. What happens if you make commits in this state? How could a user recover those commits?
+
+ANSWER
 Detached HEAD
 A detached HEAD state occurs when .pes/HEAD contains a commit hash
 instead of a branch reference.
@@ -584,6 +590,8 @@ The user can recover these commits by creating a new branch pointing to
 the commit hash or by using the commit ID from logs.### Garbage Collection and Space Reclamation
 
 **Q6.1:** Over time, the object store accumulates unreachable objects — blobs, trees, or commits that no branch points to (directly or transitively). Describe an algorithm to find and delete these objects. What data structure would you use to track "reachable" hashes efficiently? For a repository with 100,000 commits and 50 branches, estimate how many objects you'd need to visit.
+
+ANSWER
 Garbage Collection Algorithm
 To remove unreachable objects:
 1. Start from all branch heads in .pes/refs/heads/
@@ -600,6 +608,8 @@ For a repository with 100,000 commits and 50 branches, approximately
 200,000–500,000 objects may need to be visited.
    
 **Q6.2:** Why is it dangerous to run garbage collection concurrently with a commit operation? Describe a race condition where GC could delete an object that a concurrent commit is about to reference. How does Git's real GC avoid this?
+
+ANSWER
 • If GC runs at this time, it may delete these objects
 • This results in broken commits referencing missing data
 How Git Avoids This:
